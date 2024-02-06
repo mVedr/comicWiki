@@ -1,10 +1,8 @@
-from fastapi import Depends, FastAPI, HTTPException
-from sqlalchemy.orm import Session
-
 from apiModels import ComicRegister, UserRegister
-from functions import (create_comic, create_user, get_comic, get_comics,
-                       get_user, get_users)
+from fastapi import Depends, FastAPI, HTTPException
+from functions import *
 from models import SessionLocal
+from sqlalchemy.orm import Session
 
 app = FastAPI()
 
@@ -55,3 +53,18 @@ async def createUser(user : UserRegister,db: Session = Depends(get_db)):
         raise HTTPException(status_code=409,detail = "User Already Exists")
     return new_user
 
+@app.post("/follow/{comic_id}")
+async def follow(comic_id :int,id :int,db: Session = Depends(get_db)):
+    actionPerformed = followComic(db,id,comic_id)
+    if actionPerformed:
+        return {"data":"success"}
+    else:
+        raise HTTPException(status_code=500,detail="This action cannot be done")
+
+@app.post("/follow/{comic_id}")
+async def unfollow(comic_id :int,id :int,db: Session = Depends(get_db)):
+    actionPerfomed = unfollowComic(db,id,comic_id)
+    if actionPerfomed:
+        return {"data":"success"}
+    else:
+        raise HTTPException(status_code=500,detail="This action cannot be done")
