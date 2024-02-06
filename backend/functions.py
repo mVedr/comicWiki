@@ -1,7 +1,6 @@
-from sqlalchemy.orm import Session
-
 import apiModels
 import models
+from sqlalchemy.orm import Session
 
 
 def get_comic(db: Session,comic_id :int):
@@ -21,7 +20,7 @@ def get_users(db: Session,limit :int,offset :int):
     return users
 
 def create_user(db: Session,user : apiModels.UserRegister):
-    if checkIfUserExists(db,user): 
+    if checkIfUserExists(db,user.email,user.username): 
         return None
     
     db_user = models.User(
@@ -32,20 +31,20 @@ def create_user(db: Session,user : apiModels.UserRegister):
 
     db.add(db_user)
     db.commit()
-    return db_user
+    return user
 
 def create_comic(db: Session,comic : apiModels.ComicRegister):
     db_comic = models.Comic(**comic.model_dump())
     db.add(db_comic)
     db.commit()
     #print(db_comic)
-    return db_comic
+    return comic
 
 def create_genre(db: Session,genre : apiModels.GenreRegister):
     db_genre = models.Genre(**genre.model_dump())
     db.add(db_genre)
     db.commit()
-    return db_genre
+    return genre
 
 def create_country(db: Session,country : apiModels.CountryRegister):
     db_country = models.Country(**country.model_dump())
@@ -63,10 +62,11 @@ def followComic(db: Session,fanId :int,comicId :int)->bool:
     if (user is None) or (comic is None):
         return False
     try:
-        ind = comic.fans.index(user)
+        ind = user.favComics.index(comic)
         return False
     except ValueError:
-        comic.fans.append(comic)
+        user.favComics.append(comic)
+        db.commit()
         return True
 
 def unfollowComic(db: Session,fanId :int,comicId :int)->bool:
@@ -77,6 +77,7 @@ def unfollowComic(db: Session,fanId :int,comicId :int)->bool:
     try:
         ind = comic.fans.index(user)
         del comic.fans[ind]
+        db.commit()
         return True
     except ValueError:
         return False
@@ -91,6 +92,12 @@ def checkIfComicIsFollowed(db: Session,fanId :int,comicId :int)->bool:
         return True
     except ValueError:
         return False
+
+def isAdmin():
+    pass
+
+def isMod():
+    pass
 
 def getByCountry(db: Session,):
     pass

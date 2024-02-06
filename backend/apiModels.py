@@ -43,3 +43,10 @@ class GenreRegister(BaseModel):
 
 class CountryRegister(BaseModel):
     name: str
+
+class UserIdRegister(BaseModel):
+    id: int
+
+class UserLogin(BaseModel):
+    username: str
+    password: str

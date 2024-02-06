@@ -1,10 +1,28 @@
-from apiModels import ComicRegister, UserRegister
+from apiModels import ComicRegister, UserIdRegister, UserLogin, UserRegister
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 from functions import *
 from models import SessionLocal
 from sqlalchemy.orm import Session
 
 app = FastAPI()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
@@ -61,10 +79,38 @@ async def follow(comic_id :int,id :int,db: Session = Depends(get_db)):
     else:
         raise HTTPException(status_code=500,detail="This action cannot be done")
 
-@app.post("/follow/{comic_id}")
+@app.post("/unfollow/{comic_id}")
 async def unfollow(comic_id :int,id :int,db: Session = Depends(get_db)):
     actionPerfomed = unfollowComic(db,id,comic_id)
     if actionPerfomed:
         return {"data":"success"}
     else:
         raise HTTPException(status_code=500,detail="This action cannot be done")
+
+@app.post("/genre/")
+async def addGenre():
+    pass
+
+@app.post("/admin/{comic_id}")
+async def requestAdminPermission(comic_id :int,usr : UserIdRegister,db: Session = Depends(get_db)):
+    id = usr.id
+    user = get_user(db, user_id=id)
+    comic = get_comic(db,comic_id)
+    comic.admins.append(user)
+    db.commit()
+
+@app.post("/mod/{comic}")
+async def requestModeratorPermission(comic_id :int,usr : UserIdRegister,db: Session = Depends(get_db)):
+    id = usr.id
+    user = get_user(db, user_id=id)
+    comic = get_comic(db,comic_id)
+    comic.admins.append(user)
+    db.commit()
+
+@app.post("/login/")
+async def login(req :UserLogin,db: Session = Depends(get_db)):
+    pass
+
+@app.get("/token/")
+async def func(token: str = Depends(oauth2_scheme)):
+    return {"token": token}
