@@ -48,7 +48,7 @@ async def getUsers(user_id :int, db: Session = Depends(get_db)):
     return user
 
 @app.get("/comics/")
-async def getComics(skip: int=0, limit: int=10, db: Session = Depends(get_db)):
+async def getComics(skip: int=0, limit: int=5, db: Session = Depends(get_db)):
     comics = get_comics(db=db,offset=skip, limit=limit)
     return comics
 
