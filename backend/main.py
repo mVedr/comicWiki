@@ -47,6 +47,13 @@ async def getUsers(user_id :int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404,detail="User not found")
     return user
 
+@app.get("/user/{username}")
+async def getUserByUsername(username :str, db: Session = Depends(get_db)):
+    user = get_user_by_username(db,username)
+    if user is None:
+        raise HTTPException(status_code=404,detail="User not found")
+    return user
+
 @app.get("/comics/")
 async def getComics(skip: int=0, limit: int=5, db: Session = Depends(get_db)):
     comics = get_comics(db=db,offset=skip, limit=limit)

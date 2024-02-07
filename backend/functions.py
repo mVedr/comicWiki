@@ -11,6 +11,11 @@ def get_user(db: Session,user_id :int) -> models.User| None:
     user = db.query(models.User).where(models.User.id == user_id).one_or_none()
     return user
 
+def get_user_by_username(db: Session, username: str) -> models.User | None:
+    user = db.query(models.User).filter(models.User.username == username).first()
+    return user
+
+
 def get_comics(db: Session,limit :int,offset :int):
     comics =  db.query(models.Comic).offset(offset=offset).limit(limit=limit).all()
     return comics
