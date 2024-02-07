@@ -63,7 +63,6 @@ function SignUp() {
 
   return (
     <>
-      {" "}
       {error.length > 0 ? <Alert variant="danger">{error}</Alert> : <></>}
       <div
         style={{

@@ -1,3 +1,4 @@
+"use client"
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -10,17 +11,17 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers:{
-        setId: (state,action) => {
+        setReduxId: (state,action) => {
             state.currId = action.payload
         },
-        setUserName: (state,action) => {
+        setReduxUserName: (state,action) => {
             state.currUserName = action.payload
         },
-        setEmail: (state,action) => {
+        setReduxEmail: (state,action) => {
             state.currEmail = action.payload
         }
     }
 })
 
-export const { setEmail,setId,setUserName } = userSlice.actions
+export const { setReduxEmail,setReduxId,setReduxUserName } = userSlice.actions
 export default userSlice.reducer

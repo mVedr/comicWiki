@@ -1,7 +1,7 @@
-import { carlin } from "@/constants";
 import Link from 'next/link';
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { carlin } from "../constants";
 function ComicCard({data}) {
   return (
     <Card style={{width:"15rem" ,padding:"1rem"}}>

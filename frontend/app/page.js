@@ -1,9 +1,9 @@
 "use client";
-import ComicCard from "@/components/ComicCard";
-import { apiUrl } from "@/constants";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
+import ComicCard from "../components/ComicCard";
 function Home() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +12,7 @@ function Home() {
   useEffect(() => {
     setIsLoading(false);
     axios
-      .get(`${apiUrl}/comics/`)
+      .get(`http://localhost:8000/comics/`)
       .then(function (response) {
         setData(response.data);
         console.log(response.data);
