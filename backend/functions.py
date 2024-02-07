@@ -98,13 +98,20 @@ def checkIfComicIsFollowed(db: Session,fanId :int,comicId :int)->bool:
     except ValueError:
         return False
 
+def get_fav_comics(db: Session,userId :int):
+    user = db.query(models.User).where((models.User.id==userId)).first()
+    if user is None:
+        return None
+    comics = list(user.favComics)
+    return comics
+
 def isAdmin():
     pass
 
 def isMod():
     pass
 
-def getByCountry(db: Session,):
+def getByCountry():
     pass
 
 def getByGenre():

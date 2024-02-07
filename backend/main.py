@@ -124,3 +124,10 @@ async def login(req :UserLogin,db: Session = Depends(get_db)):
 @app.get("/token/")
 async def func(token: str = Depends(oauth2_scheme)):
     return {"token": token}
+
+@app.get("/favourites/{user_id}")
+async def getFavourites(user_id: int,db: Session = Depends(get_db)):
+    comics = get_fav_comics(db, user_id)
+    if comics is None:
+        raise HTTPException(404,"No Such User Exists")
+    return comics

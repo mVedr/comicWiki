@@ -37,7 +37,7 @@ function Home() {
 
   return (
     <>
-    <h1>ComicWiki</h1>
+   
       <div
         style={{
           height: "400px",

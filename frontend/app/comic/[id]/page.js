@@ -35,11 +35,10 @@ function ComicPage({ params }) {
     const numId = parseInt(params.id);
     const currId = parseInt(localStorage.getItem("currId"));
     axios
-      .post(`http://localhost:8000/follow/${numId}/?id=${currId}`, {
-      })
+      .post(`http://localhost:8000/follow/${numId}/?id=${currId}`, {})
       .then(function (res) {
         const ok = JSON.parse(res.data);
-        if (ok) window.location.reload(); 
+        if (ok) window.location.reload();
       })
       .catch(function (err) {
         setError(err.response.data.detail);
@@ -55,7 +54,7 @@ function ComicPage({ params }) {
       .post(`http://localhost:8000/unfollow/${numId}/?id=${currId}`, {})
       .then(function (res) {
         const ok = JSON.parse(res.data);
-        if (ok) window.location.reload(); 
+        if (ok) window.location.reload();
       })
       .catch(function (err) {
         setError(err.response.data.detail);
@@ -77,6 +76,7 @@ function ComicPage({ params }) {
 
   return (
     <div>
+      
       <div
         style={{
           display: "flex",
