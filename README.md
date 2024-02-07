@@ -1,4 +1,4 @@
-Frontend - React (JS)
+Frontend - NextJs (JS)
 
 Backend - FastAPI (Python)
 
