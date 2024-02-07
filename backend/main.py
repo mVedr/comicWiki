@@ -80,15 +80,20 @@ async def createUser(user : UserRegister,db: Session = Depends(get_db)):
 async def follow(comic_id :int,id :int,db: Session = Depends(get_db)):
     actionPerformed = followComic(db,id,comic_id)
     if actionPerformed:
-        return {"data":"success"}
+        return True
     else:
         raise HTTPException(status_code=500,detail="This action cannot be done")
+
+@app.get("/isFollowed/{comic_id}")
+async def isFollowed(comic_id:int,user_id :int,db: Session = Depends(get_db)):
+    ok = checkIfComicIsFollowed(db,user_id,comic_id)
+    return ok
 
 @app.post("/unfollow/{comic_id}")
 async def unfollow(comic_id :int,id :int,db: Session = Depends(get_db)):
     actionPerfomed = unfollowComic(db,id,comic_id)
     if actionPerfomed:
-        return {"data":"success"}
+        return True
     else:
         raise HTTPException(status_code=500,detail="This action cannot be done")
 

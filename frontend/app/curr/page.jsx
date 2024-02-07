@@ -35,6 +35,7 @@ function CurrUser() {
         .finally(() => {
           setIsLoading(false);
         });
+        
     }
   };
   if (isLoading) {

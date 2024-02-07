@@ -62,8 +62,8 @@ def checkIfUserExists(db: Session,email : str,username :str):
     return res is not None
 
 def followComic(db: Session,fanId :int,comicId :int)->bool:
-    user = db.query(models.User).where((models.User.id==fanId)).one_or_none()
-    comic = db.query(models.Comic).where((models.Comic.id==comicId)).one_or_none()
+    user = db.query(models.User).where((models.User.id==fanId)).first()
+    comic = db.query(models.Comic).where((models.Comic.id==comicId)).first()
     if (user is None) or (comic is None):
         return False
     try:
@@ -75,8 +75,8 @@ def followComic(db: Session,fanId :int,comicId :int)->bool:
         return True
 
 def unfollowComic(db: Session,fanId :int,comicId :int)->bool:
-    user = db.query(models.User).where((models.User.id==fanId)).one_or_none()
-    comic = db.query(models.Comic).where((models.Comic.id==comicId)).one_or_none()
+    user = db.query(models.User).where((models.User.id==fanId)).first()
+    comic = db.query(models.Comic).where((models.Comic.id==comicId)).first()
     if (user is None) or (comic is None):
         return False
     try:
@@ -88,8 +88,8 @@ def unfollowComic(db: Session,fanId :int,comicId :int)->bool:
         return False
 
 def checkIfComicIsFollowed(db: Session,fanId :int,comicId :int)->bool:
-    user = db.query(models.User).where((models.User.id==fanId)).one_or_none()
-    comic = db.query(models.Comic).where((models.Comic.id==comicId)).one_or_none()
+    user = db.query(models.User).where((models.User.id==fanId)).first()
+    comic = db.query(models.Comic).where((models.Comic.id==comicId)).first()
     if (user is None) or (comic is None):
         return False
     try:
