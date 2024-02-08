@@ -20,6 +20,9 @@ function NavBar() {
             <Nav.Link href="/curr" style={{ color: "white" }}>
               Profile
             </Nav.Link>
+            <Nav.Link href="/search" style={{ color: "white" }}>
+              Search
+            </Nav.Link>
             <NavDropdown
               title="Privileges"
               id="basic-nav-dropdown"

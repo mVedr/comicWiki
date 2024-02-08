@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
-import ComicAccordian from "../../components/ComicAccordian";
+import ComicTable from "../../components/ComicTable";
 function Moderator() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +34,7 @@ function Moderator() {
     );
   }
 
-  return <ComicAccordian data={data}></ComicAccordian>
+  return <ComicTable data={data}></ComicTable>
 }
 
 export default Moderator;
