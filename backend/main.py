@@ -146,3 +146,10 @@ async def getFavourites(user_id: int,db: Session = Depends(get_db)):
     if comics is None:
         raise HTTPException(404,"No Such User Exists")
     return comics
+
+@app.get("/search/{comic_name}")
+async def search(comic_name: str, db: Session = Depends(get_db)):
+    comics = searchForComics(db, comic_name)
+    if not comics:
+        return []
+    return comics

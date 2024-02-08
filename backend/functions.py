@@ -117,6 +117,10 @@ def get_modsOf(db: Session,myid :int)->None | list:
         return None
     return list(user.modOf)
 
+def searchForComics(db: Session, name: str) -> list:
+    ans = db.query(models.Comic).filter(models.Comic.name.like(f'%{name}%')).all()
+    return ans
+
 def get_adminsFor():
     pass
 
