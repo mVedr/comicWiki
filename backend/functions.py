@@ -105,10 +105,22 @@ def get_fav_comics(db: Session,userId :int):
     comics = list(user.favComics)
     return comics
 
-def isAdmin():
+def get_adminsOf(db: Session,myid :int)->None | list:
+    user = db.query(models.User).where((models.User.id==myid)).first()
+    if user is None:
+        return None
+    return list(user.adminOf)
+
+def get_modsOf(db: Session,myid :int)->None | list:
+    user = db.query(models.User).where((models.User.id==myid)).first()
+    if user is None:
+        return None
+    return list(user.modOf)
+
+def get_adminsFor():
     pass
 
-def isMod():
+def get_modsFor():
     pass
 
 def getByCountry():

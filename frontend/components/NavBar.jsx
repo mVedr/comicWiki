@@ -26,7 +26,7 @@ function NavBar() {
               style={{ color: "white" }}
             >
               <NavDropdown.Item
-                href="#action/3.1"
+                href="/admin"
                 style={{
                   backgroundColor: "red",
                   padding: 5,
@@ -36,7 +36,7 @@ function NavBar() {
                 Administrator
               </NavDropdown.Item>
               <NavDropdown.Item
-                href="#action/3.2"
+                href="/mod"
                 style={{
                   backgroundColor: "lightblue",
                   padding: 5,

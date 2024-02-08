@@ -101,7 +101,22 @@ async def unfollow(comic_id :int,id :int,db: Session = Depends(get_db)):
 async def addGenre():
     pass
 
-@app.post("/admin/{comic_id}")
+@app.get("/admin/{usrId}")
+async def getAdmin(usrId : int,db: Session = Depends(get_db)):
+    lst = get_adminsOf(db,usrId)
+    if lst is None:
+        raise HTTPException(404,"No Such User Exists")
+    return lst
+
+    
+@app.get("/mod/{usrId}")
+async def getMod(usrId : int,db: Session = Depends(get_db)):
+    lst = get_modsOf(db,usrId)
+    if lst is None:
+        raise HTTPException(404,"No Such User Exists")
+    return lst   
+
+@app.post("/becomeAdmin/{comic_id}")
 async def requestAdminPermission(comic_id :int,usr : UserIdRegister,db: Session = Depends(get_db)):
     id = usr.id
     user = get_user(db, user_id=id)
@@ -109,7 +124,7 @@ async def requestAdminPermission(comic_id :int,usr : UserIdRegister,db: Session 
     comic.admins.append(user)
     db.commit()
 
-@app.post("/mod/{comic}")
+@app.post("/becomeMod/{comic}")
 async def requestModeratorPermission(comic_id :int,usr : UserIdRegister,db: Session = Depends(get_db)):
     id = usr.id
     user = get_user(db, user_id=id)
