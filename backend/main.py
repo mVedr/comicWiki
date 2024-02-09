@@ -45,8 +45,8 @@ async def root():
 async def getInfo(comic_id :int, db: Session = Depends(get_db)):
     cache = r.get(f"comics/{comic_id}")
     if cache:
-        print("Cache hit")
-        print(cache)
+        # print("Cache hit")
+        # print(cache)
         return json.loads(cache)
     user = get_comic(db,comic_id)
     if user is None:
@@ -182,7 +182,7 @@ async def getFavourites(user_id: int,db: Session = Depends(get_db)):
 async def search(comic_name: str, db: Session = Depends(get_db)):
     cc = r.get(f"/search/{comic_name}")
     if cc is not None:
-        print("search cache found : ",cc)
+        #print("search cache found : ",cc)
         return json.loads(cc)
     comics = searchForComics(db, comic_name)
     lst = [{
