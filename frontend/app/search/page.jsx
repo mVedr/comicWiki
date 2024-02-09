@@ -1,7 +1,7 @@
-"use client"
+"use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
-
 const splitStringIntoArray = (str) => {
   let arr = str.split(/\s+/).filter(Boolean);
   return arr;
@@ -39,7 +39,7 @@ function Search() {
     });
 
     const results = await Promise.all(promises);
-    console.log(results)
+    console.log(results);
     results.forEach((list) => {
       ans.push(...list);
     });
@@ -48,7 +48,7 @@ function Search() {
 
   return (
     <>
-      <Form.Label htmlFor="inputPassword5">Search For User</Form.Label>
+      <Form.Label >Search For User</Form.Label>
       <Form.Control
         type="text"
         value={name}
@@ -56,7 +56,18 @@ function Search() {
       />
       <ul>
         {data.map((ans, index) => {
-          return <li key={index}>{ans.name}</li>;
+          return (
+            <li key={index}>
+              {ans.name} {`  `} 
+              <span style={{ color: "green", textDecoration: "underline" }}>
+                <Link href={`/green-room/${ans.id}`}>Green Room</Link>
+              </span>
+              {`  `}
+              <span style={{ color: "blue", textDecoration: "underline" }}>
+                <Link href={`/comic/${ans.id}`}>Profile</Link>
+              </span>
+            </li>
+          );
         })}
       </ul>
     </>
