@@ -135,9 +135,4 @@ class Genre(BaseModel):
     def __str__(self):
         return self.name
 
-#todo -->  (comic--genre --> n to m)
-
-# class GreenRoom(BaseModel):
-#     pass
-    
 Base.metadata.create_all(engine)

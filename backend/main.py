@@ -1,6 +1,12 @@
+import json
+from typing import List
+
+import redis
 from apiModels import ComicRegister, UserIdRegister, UserLogin, UserRegister
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import (Depends, FastAPI, HTTPException, WebSocket,
+                     WebSocketDisconnect)
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordBearer
 from functions import *
 from models import SessionLocal
@@ -8,7 +14,6 @@ from sqlalchemy.orm import Session
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 origins = [
     "http://localhost:5173",
     "http://localhost:3000",
@@ -22,6 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+r = redis.Redis(host="localhost", port=6379,db=0)
+
 def get_db():
     db = SessionLocal()
     try:
@@ -29,15 +36,23 @@ def get_db():
     finally:
         db.close()
 
+
 @app.get("/")
 async def root():
     return {"message": "Hello ComicWiki"}
 
 @app.get("/comics/{comic_id}")
 async def getInfo(comic_id :int, db: Session = Depends(get_db)):
+    # cache = r.get(f"comics/{comic_id}")
+    # if cache:
+    #     print("Cache hit")
+    #     return json.loads(cache)
     user = get_comic(db,comic_id)
     if user is None:
         raise HTTPException(status_code=404,detail="Comic not found")
+    #userD = dict(**user)
+    # str = json.dumps(user)
+    # r.set(f"comics/{comic_id}",str,ex=24*60*60)
     return user
 
 @app.get("/users/{user_id}")
@@ -153,3 +168,37 @@ async def search(comic_name: str, db: Session = Depends(get_db)):
     if not comics:
         return []
     return comics
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_text(message)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+
+manager = ConnectionManager()
+
+@app.websocket("/ws/greenroom/{comic_id}/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, comic_id:int, user_id:int,db :Session = Depends(get_db)):
+    await manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            #await manager.send_personal_message(f"You wrote: {data}", websocket)
+            user = get_user(db,user_id)
+            await manager.broadcast(f"{user.username}: {data}")
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+        await manager.broadcast(f"{user.username} left the chat")
