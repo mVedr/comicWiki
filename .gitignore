@@ -2,3 +2,4 @@ __pycache__
 database.db
 todo
 redis1.py
+package-lock.json
