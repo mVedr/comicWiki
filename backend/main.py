@@ -43,16 +43,32 @@ async def root():
 
 @app.get("/comics/{comic_id}")
 async def getInfo(comic_id :int, db: Session = Depends(get_db)):
-    # cache = r.get(f"comics/{comic_id}")
-    # if cache:
-    #     print("Cache hit")
-    #     return json.loads(cache)
+    cache = r.get(f"comics/{comic_id}")
+    if cache:
+        print("Cache hit")
+        print(cache)
+        return json.loads(cache)
     user = get_comic(db,comic_id)
     if user is None:
         raise HTTPException(status_code=404,detail="Comic not found")
+    cmc = {
+        "id": user.id,
+        "name": user.name,
+        "dob": user.dob,
+        "desc": user.desc,
+        "age": user.age,
+        "isAlive": user.isAlive,
+        "dod": user.dod,
+        "twitterUrl": user.twitterUrl,
+        "instaUrl": user.instaUrl,
+        "youtubeUrl": user.youtubeUrl,
+        "wikifeetUrl": user.wikifeetUrl,
+        "onlyFansUrl": user.onlyFansUrl,
+        "wikifeetScore": user.wikifeetScore
+    }
     #userD = dict(**user)
-    # str = json.dumps(user)
-    # r.set(f"comics/{comic_id}",str,ex=24*60*60)
+    str = json.dumps(cmc)
+    r.set(f"comics/{comic_id}",str,ex=24*60*60)
     return user
 
 @app.get("/users/{user_id}")
@@ -164,10 +180,34 @@ async def getFavourites(user_id: int,db: Session = Depends(get_db)):
 
 @app.get("/search/{comic_name}")
 async def search(comic_name: str, db: Session = Depends(get_db)):
+    cc = r.get(f"/search/{comic_name}")
+    if cc is not None:
+        print("search cache found : ",cc)
+        return json.loads(cc)
     comics = searchForComics(db, comic_name)
+    lst = [{
+         "id": user.id,
+        "name": user.name,
+        "dob": user.dob,
+        "desc": user.desc,
+        "age": user.age,
+        "isAlive": user.isAlive,
+        "dod": user.dod,
+        "twitterUrl": user.twitterUrl,
+        "instaUrl": user.instaUrl,
+        "youtubeUrl": user.youtubeUrl,
+        "wikifeetUrl": user.wikifeetUrl,
+        "onlyFansUrl": user.onlyFansUrl,
+        "wikifeetScore": user.wikifeetScore,
+    } for user in comics]
+    ans = []
     if not comics:
-        return []
-    return comics
+        ans = []
+    else:
+        ans = comics
+    str = json.dumps(lst)
+    r.set(f"/search/{comic_name}",str,ex=24*60*60)
+    return ans
 
 class ConnectionManager:
     def __init__(self):
