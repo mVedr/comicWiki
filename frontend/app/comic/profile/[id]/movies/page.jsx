@@ -1,10 +1,10 @@
 "use client";
 import axios from "axios";
+import Link from 'next/link';
 import { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Spinner from "react-bootstrap/Spinner";
 import MovieGrid from "../../../../../components/MovieGrid";
-
 function Movies({params}) {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -44,9 +44,13 @@ function Movies({params}) {
       justifyContent: 'center',
       alignItems: 'center',
     }}>
-      <Button style={{
-        margin:14
-      }} >Add A Movie</Button>
+      <Button variant="primary" style={{
+        "margin": 10
+      }}>
+      <Link href={`/comic/profile/${parseInt(params.id)}/movies/add`}>Add A Movie</Link>
+      </Button>
+    
+      
       <MovieGrid data={data} disableVideo={false} />
     </div>
   );

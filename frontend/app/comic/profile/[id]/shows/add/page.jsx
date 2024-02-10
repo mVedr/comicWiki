@@ -3,7 +3,7 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 
 
-function AddMovie() {
+function AddShow() {
   return (
     <div
         style={{
@@ -42,9 +42,9 @@ function AddMovie() {
           style={{ height: "100px" }}
         />
       </FloatingLabel>
-      <Button variant="primary">Add Movie</Button>
+      <Button variant="primary">Add Show</Button>
     </div>
   );
 }
 
-export default AddMovie;
+export default AddShow;

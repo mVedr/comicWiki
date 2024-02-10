@@ -2,28 +2,20 @@ import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 
-
-function AddMovie() {
+function AddSpecial() {
   return (
     <div
-        style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            margin : 10
-        }}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+        margin: 10,
+      }}
     >
       <FloatingLabel
         controlId="floatingInput"
-        label="Movie Title"
-        className="mb-3"
-      >
-        <Form.Control type="text" />
-      </FloatingLabel>
-      <FloatingLabel
-        controlId="floatingInput"
-        label="Character Played"
+        label="Special Title"
         className="mb-3"
       >
         <Form.Control type="text" />
@@ -42,9 +34,9 @@ function AddMovie() {
           style={{ height: "100px" }}
         />
       </FloatingLabel>
-      <Button variant="primary">Add Movie</Button>
+      <Button variant="primary">Add Special</Button>
     </div>
   );
 }
 
-export default AddMovie;
+export default AddSpecial;

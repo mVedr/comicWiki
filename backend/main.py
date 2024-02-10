@@ -229,6 +229,34 @@ async def add_movie(comic_id: int,req: MovieRegister, db : Session = Depends(get
 async def update_movie(comic_id:int,req:MovieRegister, db : Session = Depends(get_db)):
     pass
 
+@app.get("/shows/{comic_id}")
+async def get_shows(comic_id:int,db : Session = Depends(get_db)):
+    ans = getShows(db,comic_id)
+    if ans is not None:
+        return ans
+    raise HTTPException(404,detail="No such comic exists")
+
+@app.post("/comic/shows/{comic_id}")
+async def add_show(comic_id: int,req: ShowRegister, db : Session = Depends(get_db)):
+    res = addShow(db,comic_id,req)
+    if res is None:
+        raise HTTPException(404,detail="No such comic exists")
+    return res
+
+@app.get("/specials/{comic_id}")
+async def get_specials(comic_id:int,db : Session = Depends(get_db)):
+    ans = getSpecials(db,comic_id)
+    if ans is not None:
+        return ans
+    raise HTTPException(404,detail="No such comic exists")
+
+@app.post("/comic/specials/{comic_id}")
+async def add_special(comic_id: int,req: ShowRegister, db : Session = Depends(get_db)):
+    res = addSpecial(db,comic_id,req)
+    if res is None:
+        raise HTTPException(404,detail="No such comic exists")
+    return res
+
 class ConnectionManager:
     def __init__(self):
         self.active_connections: List[WebSocket] = []

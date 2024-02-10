@@ -1,22 +1,22 @@
+import React from "react";
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 
-
-function AddMovie() {
+function UpdateShow() {
   return (
     <div
-        style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            margin : 10
-        }}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+        margin: 10,
+      }}
     >
       <FloatingLabel
         controlId="floatingInput"
-        label="Movie Title"
+        label="Show Title"
         className="mb-3"
       >
         <Form.Control type="text" />
@@ -35,16 +35,16 @@ function AddMovie() {
       >
         <Form.Control type="text" />
       </FloatingLabel>
-      <FloatingLabel className="mb-3" label="Movie Description">
+      <FloatingLabel className="mb-3" label="Show Description">
         <Form.Control
           as="textarea"
           placeholder="Leave a comment here"
           style={{ height: "100px" }}
         />
       </FloatingLabel>
-      <Button variant="primary">Add Movie</Button>
+      <Button variant="primary">Update</Button>
     </div>
   );
 }
 
-export default AddMovie;
+export default UpdateShow;

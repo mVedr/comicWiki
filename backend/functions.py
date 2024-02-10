@@ -142,6 +142,48 @@ def addMovie(db: Session, id: int,mv : apiModels.MovieRegister):
     db.commit()
     return True
 
+def getShows(db: Session, id: int) -> list[models.Shows]:
+    ans = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if ans is None:
+        return None
+    return list(ans.shows)
+
+def addShow(db: Session, id: int,mv : apiModels.ShowRegister):
+    cmc = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if cmc is None:
+        return None
+    cmc.movies.append(
+        models.Shows(
+            comicCharacterName = mv.comicCharacterName,
+            name = mv.name,
+            url = mv.url,
+            description = mv.description
+        )
+    )
+    db.commit()
+    return True
+
+def getSpecials(db: Session, id: int) -> list[models.Specials]:
+    ans = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if ans is None:
+        return None
+    return list(ans.specials)
+
+def addSpecial(db: Session, id: int,mv : apiModels.SpecialRegister):
+    cmc = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if cmc is None:
+        return None
+    cmc.movies.append(
+        models.Specials(
+            comicCharacterName = mv.comicCharacterName,
+            name = mv.name,
+            url = mv.url,
+            description = mv.description
+        )
+    )
+    db.commit()
+    return True
+
 def updateMovie(db: Session, id: int):
     pass 
     
