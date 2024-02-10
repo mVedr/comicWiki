@@ -51,6 +51,10 @@ def create_genre(db: Session,genre : apiModels.GenreRegister):
     db.commit()
     return genre
 
+def get_all_genres(db: Session):
+    db_genres = db.query(models.Genre).all()
+    return db_genres
+
 def create_country(db: Session,country : apiModels.CountryRegister):
     db_country = models.Country(**country.model_dump())
     db.add(db_country)
@@ -184,6 +188,18 @@ def addSpecial(db: Session, id: int,mv : apiModels.SpecialRegister):
     db.commit()
     return True
 
+def get_country(db : Session,id :int):
+    usr = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if usr is None:
+        return None
+    return usr.country.name
+
+def get_comics_by_country(db : Session,code : str):
+    q = db.query(models.Country).filter(models.Country.name == code).one_or_none()
+    if q is None:
+        return q
+    return list(q.comics)
+
 def updateMovie(db: Session, id: int):
     pass 
     
@@ -191,9 +207,6 @@ def get_adminsFor():
     pass
 
 def get_modsFor():
-    pass
-
-def getByCountry():
     pass
 
 def getByGenre():

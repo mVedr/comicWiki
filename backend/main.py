@@ -1,6 +1,7 @@
 import json
 from typing import List
 
+import countryCode
 import redis
 from apiModels import (ComicRegister, MovieRegister, ShowRegister,
                        SpecialRegister, UserIdRegister, UserLogin,
@@ -289,3 +290,27 @@ async def websocket_endpoint(websocket: WebSocket, comic_id:int, user_id:int,db 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast(f"{user.username} left the chat")
+
+@app.get("/genres/")
+async def getAllGenres(db:Session = Depends(get_db)):
+    gs = get_all_genres(db)
+    arr = [
+        {
+            "id":g.id,
+            "name":g.name
+        }
+        for g in gs
+    ]
+    return arr
+
+@app.get("/comic/{comic_id}/country/")
+async  def getCountry(comic_id : int,db:Session = Depends(get_db)):
+    ans = get_country(db,comic_id)
+    if ans is None:
+        raise HTTPException(404,"No info found")
+    return {"name" : countryCode.codeToName[ans]}
+
+@app.get("/country/{code}")
+async def getComicsByCountryCode(code : str,db:Session = Depends(get_db)):
+    ans = get_comics_by_country(db,code)
+    return ans
