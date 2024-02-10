@@ -32,8 +32,7 @@ function NavBar() {
                 href="/admin"
                 style={{
                   backgroundColor: "red",
-                  padding: 5,
-                  marginBottom: 3,
+                  padding: 5
                 }}
               >
                 Administrator
@@ -42,17 +41,17 @@ function NavBar() {
                 href="/mod"
                 style={{
                   backgroundColor: "lightblue",
-                  padding: 5,
+                  padding: 5
+                  // marginBottom: 3,
                 }}
               >
                 Moderator
               </NavDropdown.Item>
-              <NavDropdown.Divider />
               <NavDropdown.Item
                 href="/createComic"
                 style={{
                   backgroundColor: "yellow",
-                  padding: 5,
+                  padding: 5
                 }}
               >
                 Create A Comic
