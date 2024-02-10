@@ -121,6 +121,30 @@ def searchForComics(db: Session, name: str) -> list[models.Comic]:
     ans = db.query(models.Comic).filter(models.Comic.name.like(f'%{name}%')).all()
     return ans
 
+def getMovies(db: Session, id: int) -> list[models.Movies]:
+    ans = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if ans is None:
+        return None
+    return list(ans.movies)
+
+def addMovie(db: Session, id: int,mv : apiModels.MovieRegister):
+    cmc = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if cmc is None:
+        return None
+    cmc.movies.append(
+        models.Movies(
+            comicCharacterName = mv.comicCharacterName,
+            name = mv.name,
+            url = mv.url,
+            description = mv.description
+        )
+    )
+    db.commit()
+    return True
+
+def updateMovie(db: Session, id: int):
+    pass 
+    
 def get_adminsFor():
     pass
 

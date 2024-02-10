@@ -2,7 +2,9 @@ import json
 from typing import List
 
 import redis
-from apiModels import ComicRegister, UserIdRegister, UserLogin, UserRegister
+from apiModels import (ComicRegister, MovieRegister, ShowRegister,
+                       SpecialRegister, UserIdRegister, UserLogin,
+                       UserRegister)
 from fastapi import (Depends, FastAPI, HTTPException, WebSocket,
                      WebSocketDisconnect)
 from fastapi.middleware.cors import CORSMiddleware
@@ -209,6 +211,24 @@ async def search(comic_name: str, db: Session = Depends(get_db)):
     r.set(f"/search/{comic_name}",str,ex=24*60*60)
     return ans
 
+@app.get("/movies/{comic_id}")
+async def get_movies(comic_id :int, db : Session = Depends(get_db)):
+    ans = getMovies(db,comic_id)
+    if ans is not None:
+        return ans
+    raise HTTPException(404,detail="No such comic exists")
+
+@app.post("/comic/movies/{comic_id}")
+async def add_movie(comic_id: int,req: MovieRegister, db : Session = Depends(get_db)):
+    res = addMovie(db,comic_id,req)
+    if res is None:
+        raise HTTPException(404,detail="No such comic exists")
+    return res
+
+@app.patch("/comic/movies/{comic_id}")
+async def update_movie(comic_id:int,req:MovieRegister, db : Session = Depends(get_db)):
+    pass
+
 class ConnectionManager:
     def __init__(self):
         self.active_connections: List[WebSocket] = []
@@ -236,7 +256,6 @@ async def websocket_endpoint(websocket: WebSocket, comic_id:int, user_id:int,db 
     try:
         while True:
             data = await websocket.receive_text()
-            #await manager.send_personal_message(f"You wrote: {data}", websocket)
             user = get_user(db,user_id)
             await manager.broadcast(f"{user.username}: {data}")
     except WebSocketDisconnect:
