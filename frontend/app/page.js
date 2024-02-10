@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
-import ComicCard from "../components/ComicCard";
+import ComicCardList from "../components/ComicList";
 function Home() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +12,7 @@ function Home() {
   useEffect(() => {
     setIsLoading(false);
     axios
-      .get(`http://localhost:8000/comics/`)
+      .get(`http://localhost:8000/comics/?limit=6`)
       .then(function (response) {
         setData(response.data);
         console.log(response.data);
@@ -37,18 +37,12 @@ function Home() {
 
   return (
     <>
-   
-      <div
-        style={{
-          height: "400px",
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
-        {data.map((data, index) => (
-          <ComicCard key={index} data={data} />
-        ))}
-      </div>
+      <h3>Discover Comics...</h3>
+      <ComicCardList data={data} />
+      <h3>By Country...</h3>
+      <ComicCardList data={data} />
+      <h3>By Genre...</h3>
+      <ComicCardList data={data} />
     </>
   );
 }

@@ -76,7 +76,6 @@ function ComicPage({ params }) {
 
   return (
     <div>
-      
       <div
         style={{
           display: "flex",
@@ -95,29 +94,38 @@ function ComicPage({ params }) {
       <h3>DOB : {data.dob}</h3>
       <h3>Age : {data.age}</h3>
       <br />
-      {data.instaUrl && data.instaUrl !== "" && (
-        <h4>
-          <Link href={data.instaUrl} passHref={true}>
-            <button>Instagram</button>
-          </Link>
-        </h4>
-      )}
-      <br />
-      {data.twitterUrl && data.twitterUrl !== "" && (
-        <h4>
-          <Link href={data.twitterUrl} passHref={true}>
-            <button>Twitter</button>
-          </Link>
-        </h4>
-      )}
-      <br />
-      {data.youtubeUrl && data.youtubeUrl !== "" && (
-        <h4>
-          <Link href={data.youtubeUrl} passHref={true}>
-            <button>Youtube</button>
-          </Link>
-        </h4>
-      )}
+      <div
+        style={{
+          display: "flex",
+          alignContent: "center",
+          flexDirection: "row",
+        }}
+      >
+        {" "}
+        {data.instaUrl && data.instaUrl !== "" && (
+          <h4 style={{margin:3}}>
+            <Link href={data.instaUrl} passHref={true}>
+              <button>Instagram</button>
+            </Link>
+          </h4>
+        )}
+        <br />
+        {data.twitterUrl && data.twitterUrl !== "" && (
+          <h4 style={{margin:3}}>
+            <Link href={data.twitterUrl} passHref={true}>
+              <button>Twitter</button>
+            </Link>
+          </h4>
+        )}
+        <br />
+        {data.youtubeUrl && data.youtubeUrl !== "" && (
+          <h4 style={{margin:3}}>
+            <Link href={data.youtubeUrl} passHref={true}>
+              <button>Youtube</button>
+            </Link>
+          </h4>
+        )}
+      </div>
     </div>
   );
 }
