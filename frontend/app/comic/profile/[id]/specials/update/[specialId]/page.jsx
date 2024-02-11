@@ -13,7 +13,7 @@ function UpdateMovie({ params }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/specialById/${parseInt(params.showId)}`)
+      .get(`http://localhost:8000/specialById/${parseInt(params.specialId)}`)
       .then((response) => {
         setMovieTitle(response.data.name);
         setCharacterPlayed(response.data.comicCharacterName);
@@ -27,7 +27,22 @@ function UpdateMovie({ params }) {
   }, []);
 
   const handleUpdate = () => {
-    // axios.patch();
+    setIsLoading(false);
+    axios
+      .put(
+        `http://localhost:8000/comic/specials/${parseInt(params.specialId)}`,
+        {
+          name: movieTitle,
+          comicCharacterName: characterPlayed,
+          url: youtubeURL,
+          description: movieDescription,
+        }
+      )
+      .then((response) => {})
+      .catch((err) => {
+        setError(err.response.data.detail);
+      })
+      .finally(setIsLoading(false));
   };
 
   if (isLoading) {

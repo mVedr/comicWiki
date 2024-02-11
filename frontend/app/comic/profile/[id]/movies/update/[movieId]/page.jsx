@@ -27,7 +27,19 @@ function UpdateMovie({ params }) {
   }, []);
 
   const handleUpdate = () => {
-    // axios.patch();
+    setIsLoading(false);
+    axios
+      .put(`http://localhost:8000/comic/movies/${parseInt(params.movieId)}`, {
+        name: movieTitle,
+        comicCharacterName: characterPlayed,
+        url: youtubeURL,
+        description: movieDescription,
+      })
+      .then((response) => {})
+      .catch((err) => {
+        setError(err.response.data.detail);
+      })
+      .finally(setIsLoading(false));
   };
 
   if (isLoading) {

@@ -27,7 +27,19 @@ function UpdateMovie({ params }) {
   }, []);
 
   const handleUpdate = () => {
-    // axios.patch();
+    setIsLoading(false);
+    axios
+      .put(`http://localhost:8000/comic/shows/${parseInt(params.showId)}`, {
+        name: movieTitle,
+        comicCharacterName: characterPlayed,
+        url: youtubeURL,
+        description: movieDescription,
+      })
+      .then((response) => {})
+      .catch((err) => {
+        setError(err.response.data.detail);
+      })
+      .finally(setIsLoading(false));
   };
 
   if (isLoading) {
@@ -51,11 +63,7 @@ function UpdateMovie({ params }) {
         margin: 10,
       }}
     >
-      <FloatingLabel
-        controlId="movieTitle"
-        label="Show Title"
-        className="mb-3"
-      >
+      <FloatingLabel controlId="movieTitle" label="Show Title" className="mb-3">
         <Form.Control
           type="text"
           value={movieTitle}

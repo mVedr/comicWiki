@@ -233,23 +233,23 @@ async def add_movie(comic_id: int,req: MovieRegister, db : Session = Depends(get
         raise HTTPException(404,detail="No such comic exists")
     return res
 
-@app.put("/comic/movies/{comic_id}")
-async def update_movie(comic_id:int,req:MovieRegister, db : Session = Depends(get_db)):
-    res = updateMovie(db,req,comic_id)
+@app.put("/comic/movies/{movie_id}")
+async def update_movie(movie_id:int,req:MovieRegister, db : Session = Depends(get_db)):
+    res = updateMovie(db,req,movie_id)
     if res is None:
         raise HTTPException(404,detail="No such movie exists")
     return res
 
-@app.put("/comic/specials/{comic_id}")
-async def update_movie(comic_id:int,req:SpecialRegister, db : Session = Depends(get_db)):
-    res = updateSpecial(db,req,comic_id)
+@app.put("/comic/specials/{special_id}")
+async def update_movie(special_id:int,req:SpecialRegister, db : Session = Depends(get_db)):
+    res = updateSpecial(db,req,special_id)
     if res is None:
         raise HTTPException(404,detail="No such special exists")
     return res
 
-@app.put("/comic/shows/{comic_id}")
-async def update_movie(comic_id:int,req:ShowRegister, db : Session = Depends(get_db)):
-    res = updateShow(db,req,comic_id)
+@app.put("/comic/shows/{show_id}")
+async def update_movie(show_id:int,req:ShowRegister, db : Session = Depends(get_db)):
+    res = updateShow(db,req,show_id)
     if res is None:
         raise HTTPException(404,detail="No such show exists")
     return res
