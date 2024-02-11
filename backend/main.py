@@ -233,9 +233,26 @@ async def add_movie(comic_id: int,req: MovieRegister, db : Session = Depends(get
         raise HTTPException(404,detail="No such comic exists")
     return res
 
-@app.patch("/comic/movies/{comic_id}")
+@app.put("/comic/movies/{comic_id}")
 async def update_movie(comic_id:int,req:MovieRegister, db : Session = Depends(get_db)):
-    pass
+    res = updateMovie(db,req,comic_id)
+    if res is None:
+        raise HTTPException(404,detail="No such movie exists")
+    return res
+
+@app.put("/comic/specials/{comic_id}")
+async def update_movie(comic_id:int,req:SpecialRegister, db : Session = Depends(get_db)):
+    res = updateSpecial(db,req,comic_id)
+    if res is None:
+        raise HTTPException(404,detail="No such special exists")
+    return res
+
+@app.put("/comic/shows/{comic_id}")
+async def update_movie(comic_id:int,req:ShowRegister, db : Session = Depends(get_db)):
+    res = updateShow(db,req,comic_id)
+    if res is None:
+        raise HTTPException(404,detail="No such show exists")
+    return res
 
 @app.get("/shows/{comic_id}")
 async def get_shows(comic_id:int,db : Session = Depends(get_db)):
@@ -321,3 +338,24 @@ async  def getCountry(comic_id : int,db:Session = Depends(get_db)):
 async def getComicsByCountryCode(code : str,db:Session = Depends(get_db)):
     ans = get_comics_by_country(db,code)
     return ans
+
+@app.get("/movieById/{id}")
+async def getMovieById(id : int,db:Session = Depends(get_db)):
+    res = get_movie_by_id(db,id)
+    if res is None:
+        raise HTTPException(404,"No info found")
+    return res
+
+@app.get("/showById/{id}")
+async def getShowById(id : int,db:Session = Depends(get_db)):
+    res = get_show_by_id(db,id)
+    if res is None:
+        raise HTTPException(404,"No info found")
+    return res
+
+@app.get("/specialById/{id}")
+async def getSpecialById(id : int,db:Session = Depends(get_db)):
+    res = get_special_by_id(db,id)
+    if res is None:
+        raise HTTPException(404,"No info found")
+    return res

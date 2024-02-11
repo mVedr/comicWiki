@@ -1,21 +1,46 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
-
-function UpdateMovie() {
+import Spinner from "react-bootstrap/Spinner";
+function UpdateMovie({ params }) {
   const [movieTitle, setMovieTitle] = useState("");
   const [characterPlayed, setCharacterPlayed] = useState("");
   const [youtubeURL, setYoutubeURL] = useState("");
   const [movieDescription, setMovieDescription] = useState("");
-  
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/movieById/${parseInt(params.movieId)}`)
+      .then((response) => {
+        setMovieTitle(response.data.name);
+        setCharacterPlayed(response.data.comicCharacterName);
+        setYoutubeURL(response.data.url);
+        setMovieDescription(response.data.description);
+      })
+      .catch((err) => {
+        setError(err.response.data.detail);
+      })
+      .finally(setIsLoading(false));
+  }, []);
+
   const handleUpdate = () => {
-    // Perform update logic here
-    console.log("Movie Title:", movieTitle);
-    console.log("Character Played:", characterPlayed);
-    console.log("Youtube URL:", youtubeURL);
-    console.log("Movie Description:", movieDescription);
+    // axios.patch();
   };
 
+  if (isLoading) {
+    return (
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    );
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
   return (
     <div
       style={{
@@ -48,7 +73,11 @@ function UpdateMovie() {
           onChange={(e) => setCharacterPlayed(e.target.value)}
         />
       </FloatingLabel>
-      <FloatingLabel controlId="youtubeURL" label="Youtube URL" className="mb-3">
+      <FloatingLabel
+        controlId="youtubeURL"
+        label="Youtube URL"
+        className="mb-3"
+      >
         <Form.Control
           type="text"
           value={youtubeURL}

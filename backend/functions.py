@@ -42,21 +42,17 @@ def create_comic(db: Session,comic : apiModels.ComicRegister):
     db_comic = models.Comic(**comic.model_dump())
     db.add(db_comic)
     db.commit()
-    #print(db_comic)
     return comic
 
 def update_comic(db: Session, comic: apiModels.ComicRegister, comic_id: int):
-    # Query the existing comic
     db_comic = db.query(models.Comic).filter(models.Comic.id == comic_id).one_or_none()
     if db_comic is None:
         return None
 
-    # Update the existing comic with the new information
     comic_data = comic.model_dump()
     for key, value in comic_data.items():
         setattr(db_comic, key, value)
 
-    # Commit the changes to the database
     db.commit()
     
     return db_comic
@@ -204,6 +200,39 @@ def addSpecial(db: Session, id: int,mv : apiModels.SpecialRegister):
     db.commit()
     return True
 
+def updateMovie(db: Session, mv: apiModels.MovieRegister,id: int):
+    res = db.query(models.Movies).filter(models.Movies.id == id).one_or_none()
+    if res is None:
+        return None
+    res.comicCharacterName = mv.comicCharacterName
+    res.name = mv.name
+    res.description = mv.description
+    res.url = mv.url
+    db.commit()
+    return True
+
+def updateShow(db: Session, mv: apiModels.ShowRegister,id: int):
+    res = db.query(models.Shows).filter(models.Shows.id == id).one_or_none()
+    if res is None:
+        return None
+    res.comicCharacterName = mv.comicCharacterName
+    res.name = mv.name
+    res.description = mv.description
+    res.url = mv.url
+    db.commit()
+    return True
+
+def updateSpecial(db: Session, mv: apiModels.SpecialRegister,id: int):
+    res = db.query(models.Specials).filter(models.Specials.id == id).one_or_none()
+    if res is None:
+        return None
+    res.comicCharacterName = mv.comicCharacterName
+    res.name = mv.name
+    res.description = mv.description
+    res.url = mv.url
+    db.commit()
+    return True
+
 def get_country(db : Session,id :int):
     usr = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
     if usr is None:
@@ -216,9 +245,24 @@ def get_comics_by_country(db : Session,code : str):
         return q
     return list(q.comics)
 
-def updateMovie(db: Session, id: int):
-    pass 
+def get_movie_by_id(db : Session,id : int):
+    q = db.query(models.Movies).filter(models.Movies.id == id).one_or_none()
+    if q is None:
+        return None
+    return q
     
+def get_show_by_id(db : Session,id : int):
+    q = db.query(models.Shows).filter(models.Shows.id == id).one_or_none()
+    if q is None:
+        return None
+    return q
+
+def get_special_by_id(db: Session,id :int):
+    q = db.query(models.Specials).filter(models.Specials.id == id).one_or_none()
+    if q is None:
+        return None
+    return q
+
 def get_adminsFor():
     pass
 
