@@ -1,48 +1,104 @@
+"use client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 
+function AddShow({ params }) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [movieTitle, setMovieTitle] = useState("");
+  const [characterPlayed, setCharacterPlayed] = useState("");
+  const [youtubeURL, setYoutubeURL] = useState("");
+  const [movieDescription, setMovieDescription] = useState("");
 
-function AddShow() {
+  const handleSubmit = () => {
+    setIsLoading(true);
+    if (movieTitle.length > 0 && characterPlayed.length > 0) {
+      axios
+        .post(`http://localhost:8000/comic/shows/${parseInt(params.id)}`, {
+          name: movieTitle,
+          comicCharacterName: characterPlayed,
+          url: youtubeURL,
+          description: movieDescription,
+        })
+        .then((response) => {
+          setIsLoading(false);
+          router.push(`/comic/profile/${parseInt(params.id)}/shows/`);
+        })
+        .catch((err) => {
+          // Handle errors
+          setError(err.message);
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+      setError("Fill required details");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    );
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
     <div
-        style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            margin : 10
-        }}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+        margin: 10,
+      }}
     >
-      <FloatingLabel
-        controlId="floatingInput"
-        label="Movie Title"
-        className="mb-3"
-      >
-        <Form.Control type="text" />
-      </FloatingLabel>
-      <FloatingLabel
-        controlId="floatingInput"
-        label="Character Played"
-        className="mb-3"
-      >
-        <Form.Control type="text" />
-      </FloatingLabel>
-      <FloatingLabel
-        controlId="floatingInput"
-        label="Youtube URL"
-        className="mb-3"
-      >
-        <Form.Control type="text" />
-      </FloatingLabel>
-      <FloatingLabel className="mb-3" label="Movie Description">
+      <Form.Group className="mb-3" controlId="movieTitle">
+        <Form.Label>Show Title</Form.Label>
+        <Form.Control
+          type="text"
+          value={movieTitle}
+          onChange={(e) => setMovieTitle(e.target.value)}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="characterPlayed">
+        <Form.Label>Character Played</Form.Label>
+        <Form.Control
+          type="text"
+          value={characterPlayed}
+          onChange={(e) => setCharacterPlayed(e.target.value)}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="youtubeURL">
+        <Form.Label>Youtube URL</Form.Label>
+        <Form.Control
+          type="text"
+          value={youtubeURL}
+          onChange={(e) => setYoutubeURL(e.target.value)}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="movieDescription">
+        <Form.Label>Show Description</Form.Label>
         <Form.Control
           as="textarea"
           placeholder="Leave a comment here"
           style={{ height: "100px" }}
+          value={movieDescription}
+          onChange={(e) => setMovieDescription(e.target.value)}
         />
-      </FloatingLabel>
-      <Button variant="primary">Add Show</Button>
+      </Form.Group>
+      <Button variant="primary" onClick={handleSubmit}>
+        Add Show
+      </Button>
     </div>
   );
 }

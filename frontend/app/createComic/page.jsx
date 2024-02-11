@@ -7,7 +7,6 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 function CreateComic() {
-  // State variables to store form inputs
   const [data, setData] = useState(null);
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
@@ -15,9 +14,8 @@ function CreateComic() {
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  // Function to handle form submission
+
   const handleSubmit = () => {
-    // Display the entered information
     setIsLoading(false);
     axios
       .post("http://127.0.0.1:8000/comics", {
@@ -36,7 +34,6 @@ function CreateComic() {
       })
       .then((res) => {
         setData(res.data);
-       // console.log(res.data);
       })
       .catch(function (err) {
         setError(err.response.data.detail);
@@ -62,10 +59,8 @@ function CreateComic() {
   }
   return (
     <>
-    {
-      data ? <Alert variant="success">{data.name} created!</Alert> : <></>
-    }
-      
+      {data ? <Alert variant="success">{data.name} created!</Alert> : <></>}
+
       <div
         style={{
           display: "flex",
