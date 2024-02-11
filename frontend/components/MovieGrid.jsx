@@ -2,7 +2,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import MovieCard from "./MovieCard";
-function MovieGrid({data, disableVideo }) {
+function MovieGrid({data, disableVideo, mediaType }) {
   const numRows = Math.ceil(data.length / 3);
 
   const rows = Array.from({ length: numRows }, (_, rowIndex) =>
@@ -14,7 +14,7 @@ function MovieGrid({data, disableVideo }) {
         <Row key={index}>
           {row.map((item, colIndex) => (
             <Col key={colIndex}>
-              <MovieCard data={item} disableVideo={disableVideo} />
+              <MovieCard data={item} disableVideo={disableVideo}  mediaType={mediaType} />
             </Col>
           ))}
           {row.length < 3 &&

@@ -1,6 +1,6 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-function MovieCard({ data, disableVideo }) {
+function MovieCard({ data, disableVideo, mediaType }) {
   return (
     <Card style={{ width: "18rem" }}>
       {disableVideo ? (
@@ -13,7 +13,7 @@ function MovieCard({ data, disableVideo }) {
         <Card.Title>{data.name}</Card.Title>
         <Card.Text>{data.description}</Card.Text>
         {!disableVideo ? (
-          <Button variant="primary">Update</Button>
+          <Button href={`${mediaType}/update/${data.id}`}>Update</Button>
         ) : (
           <Button variant="primary">Visit</Button>
         )}

@@ -51,7 +51,7 @@ function Movies({params}) {
       </Button>
     
       
-      <MovieGrid data={data} disableVideo={false} />
+      <MovieGrid data={data} disableVideo={false} mediaType={"movies"}/>
     </div>
   );
 }

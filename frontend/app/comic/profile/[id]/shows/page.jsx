@@ -49,7 +49,7 @@ function Movies({params}) {
       }}>
       <Link href={`/comic/profile/${parseInt(params.id)}/shows/add`}>Add A Show</Link>
       </Button>
-      <MovieGrid data={data} disableVideo={false} />
+      <MovieGrid data={data} disableVideo={false} mediaType={'shows'} />
     </div>
   );
 }

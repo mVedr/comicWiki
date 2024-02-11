@@ -56,7 +56,7 @@ function Movies({ params }) {
           Add A Special
         </Link>
       </Button>
-      <MovieGrid data={data} disableVideo={false} />
+      <MovieGrid data={data} disableVideo={false} mediaType={'specials'} />
     </div>
   );
 }
