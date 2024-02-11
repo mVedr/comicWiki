@@ -46,11 +46,11 @@ async def root():
 
 @app.get("/comics/{comic_id}")
 async def getInfo(comic_id :int, db: Session = Depends(get_db)):
-    cache = r.get(f"comics/{comic_id}")
-    if cache:
-        # print("Cache hit")
-        # print(cache)
-        return json.loads(cache)
+    # cache = r.get(f"comics/{comic_id}")
+    # if cache:
+    #     # print("Cache hit")
+    #     # print(cache)
+    #     return json.loads(cache)
     user = get_comic(db,comic_id)
     if user is None:
         raise HTTPException(status_code=404,detail="Comic not found")
@@ -69,9 +69,9 @@ async def getInfo(comic_id :int, db: Session = Depends(get_db)):
         "onlyFansUrl": user.onlyFansUrl,
         "wikifeetScore": user.wikifeetScore
     }
-    #userD = dict(**user)
-    str = json.dumps(cmc)
-    r.set(f"comics/{comic_id}",str,ex=24*60*60)
+    # #userD = dict(**user)
+    # str = json.dumps(cmc)
+    # r.set(f"comics/{comic_id}",str,ex=24*60*60)
     return user
 
 @app.get("/users/{user_id}")
@@ -102,6 +102,13 @@ async def getUsers(skip: int=0, limit: int=10,db: Session = Depends(get_db)):
 async def createComic(comic : ComicRegister,db: Session = Depends(get_db)):
     new_comic = create_comic(db,comic)
     return new_comic
+
+@app.put("/comics/{comic_id}")
+async def updateComic(comic_id:int,comic : ComicRegister,db: Session = Depends(get_db)):
+    uc = update_comic(db,comic,comic_id)
+    if uc is None:
+        raise HTTPException(404,"Comic not found")
+    return uc
 
 @app.post("/users/")
 async def createUser(user : UserRegister,db: Session = Depends(get_db)):

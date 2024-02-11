@@ -45,6 +45,22 @@ def create_comic(db: Session,comic : apiModels.ComicRegister):
     #print(db_comic)
     return comic
 
+def update_comic(db: Session, comic: apiModels.ComicRegister, comic_id: int):
+    # Query the existing comic
+    db_comic = db.query(models.Comic).filter(models.Comic.id == comic_id).one_or_none()
+    if db_comic is None:
+        return None
+
+    # Update the existing comic with the new information
+    comic_data = comic.model_dump()
+    for key, value in comic_data.items():
+        setattr(db_comic, key, value)
+
+    # Commit the changes to the database
+    db.commit()
+    
+    return db_comic
+
 def create_genre(db: Session,genre : apiModels.GenreRegister):
     db_genre = models.Genre(**genre.model_dump())
     db.add(db_genre)

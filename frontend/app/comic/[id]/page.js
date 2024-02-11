@@ -32,10 +32,10 @@ function ComicPage({ params }) {
           showsResponse,
           specialsResponse,
         ] = results;
-        console.log(comicsResponse.data);
-        console.log(showsResponse.data);
-        console.log(specialsResponse.data);
-        console.log(moviesResponse.data);
+        // console.log(comicsResponse.data);
+        // console.log(showsResponse.data);
+        // console.log(specialsResponse.data);
+        // console.log(moviesResponse.data);
         // Handle comics response
         setData(comicsResponse.data);
         setMovies(moviesResponse.data);
