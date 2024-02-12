@@ -28,7 +28,7 @@ function SignUp() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(username, email, password);
+    //console.log(username, email, password);
     if (username.length > 0 && email.length > 0 && password.length > 0) {
       setIsLoading(true);
       axios
@@ -38,7 +38,7 @@ function SignUp() {
           password: password,
         })
         .then(function (response) {
-          console.log(response);
+          //console.log(response);
         })
         .catch(function (err) {
           console.log(err.response.data.detail);

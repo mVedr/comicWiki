@@ -8,7 +8,14 @@ function layout({ children,params }) {
        alignItems: 'center'
     }}>
       <ComicProfileSidebar id={params.id} />
-      <div>{children}</div>
+      <div 
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent:'flex-start',
+          alignItems: 'center'
+        }} 
+      >{children}</div>
     </div>
   );
 }

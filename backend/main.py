@@ -3,9 +3,9 @@ from typing import List
 
 import countryCode
 import redis
-from apiModels import (ComicRegister, MovieRegister, ShowRegister,
-                       SpecialRegister, UserIdRegister, UserLogin,
-                       UserRegister)
+from apiModels import (ComicRegister, CountryRegister, MovieRegister,
+                       ShowRegister, SpecialRegister, UserIdRegister,
+                       UserLogin, UserRegister)
 from fastapi import (Depends, FastAPI, HTTPException, WebSocket,
                      WebSocketDisconnect)
 from fastapi.middleware.cors import CORSMiddleware
@@ -190,33 +190,33 @@ async def getFavourites(user_id: int,db: Session = Depends(get_db)):
 
 @app.get("/search/{comic_name}")
 async def search(comic_name: str, db: Session = Depends(get_db)):
-    cc = r.get(f"/search/{comic_name}")
-    if cc is not None:
-        #print("search cache found : ",cc)
-        return json.loads(cc)
+    # cc = r.get(f"/search/{comic_name}")
+    # if cc is not None:
+    #     #print("search cache found : ",cc)
+    #     return json.loads(cc)
     comics = searchForComics(db, comic_name)
-    lst = [{
-         "id": user.id,
-        "name": user.name,
-        "dob": user.dob,
-        "desc": user.desc,
-        "age": user.age,
-        "isAlive": user.isAlive,
-        "dod": user.dod,
-        "twitterUrl": user.twitterUrl,
-        "instaUrl": user.instaUrl,
-        "youtubeUrl": user.youtubeUrl,
-        "wikifeetUrl": user.wikifeetUrl,
-        "onlyFansUrl": user.onlyFansUrl,
-        "wikifeetScore": user.wikifeetScore,
-    } for user in comics]
+    # lst = [{
+    #      "id": user.id,
+    #     "name": user.name,
+    #     "dob": user.dob,
+    #     "desc": user.desc,
+    #     "age": user.age,
+    #     "isAlive": user.isAlive,
+    #     "dod": user.dod,
+    #     "twitterUrl": user.twitterUrl,
+    #     "instaUrl": user.instaUrl,
+    #     "youtubeUrl": user.youtubeUrl,
+    #     "wikifeetUrl": user.wikifeetUrl,
+    #     "onlyFansUrl": user.onlyFansUrl,
+    #     "wikifeetScore": user.wikifeetScore,
+    # } for user in comics]
     ans = []
     if not comics:
         ans = []
     else:
         ans = comics
-    str = json.dumps(lst)
-    r.set(f"/search/{comic_name}",str,ex=24*60*60)
+    # str = json.dumps(lst)
+    # r.set(f"/search/{comic_name}",str,ex=24*60*60)
     return ans
 
 @app.get("/movies/{comic_id}")
@@ -358,4 +358,27 @@ async def getSpecialById(id : int,db:Session = Depends(get_db)):
     res = get_special_by_id(db,id)
     if res is None:
         raise HTTPException(404,"No info found")
+    return res
+
+@app.put("/comic/{comic_id}/country")
+async def changeCountry(comic_id :int,req: CountryRegister,db:Session = Depends(get_db)):
+    res = change_country(db,comic_id,req.name)
+    if res is None:
+        raise HTTPException(404,"No such user found")
+    if res is False:
+        raise HTTPException(404,"No such country exists in the database")
+    return res
+
+@app.get("/isAdmin/{comic_id}")
+async def is_admin(comic_id :int,usr_id :int,db: Session=Depends(get_db)):
+    res = isAdmin(comic_id,usr_id,db)
+    if res is None:
+        raise HTTPException(404,"No info available")
+    return res
+
+@app.get("/isMod/{comic_id}")
+async def is_mod(comic_id :int,usr_id :int,db: Session=Depends(get_db)):
+    res = isMod(comic_id,usr_id,db)
+    if res is None:
+        raise HTTPException(404,"No info available")
     return res

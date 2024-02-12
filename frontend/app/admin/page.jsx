@@ -13,13 +13,12 @@ function Admin() {
     axios
       .get(`http://localhost:8000/admin/${id}`)
       .then(function (res) {
+
         setData(res.data);
-        // console.leg(JSON.parse(res.data))
-        // setData(JSON.parse(res.data));
       })
       .catch(function (err) {
         console.log(err);
-        setError(err.response.data.detail);
+       // setError(err.response.data.detail);
       })
       .finally(setIsLoading(false));
   }, []);

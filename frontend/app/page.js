@@ -15,7 +15,7 @@ function Home() {
       .get(`http://localhost:8000/comics/?limit=6`)
       .then(function (response) {
         setData(response.data);
-        console.log(response.data);
+       // console.log(response.data);
       })
       .catch(function (err) {
         setError(err.response.data.detail);

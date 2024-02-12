@@ -16,7 +16,7 @@ function Movies({ params }) {
       .get(`http://localhost:8000/specials/${numId}`)
       .then((res) => {
         setData(res.data);
-        console.log(res.data);
+       // console.log(res.data);
       })
       .catch((err) => {
         setError(err.response.data.detail);

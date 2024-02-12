@@ -39,7 +39,7 @@ function Search() {
     });
 
     const results = await Promise.all(promises);
-    console.log(results);
+    //console.log(results);
     results.forEach((list) => {
       ans.push(...list);
     });

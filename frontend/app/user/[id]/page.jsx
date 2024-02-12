@@ -12,7 +12,7 @@ function UserPage({ params }) {
     axios
       .get(`http://localhost:8000/users/${parseInt(params.id)}`)
       .then((response) => {
-        console.log(response.data);
+       // console.log(response.data);
         setData(response.data);
       })
       .catch((error) => {
@@ -27,7 +27,7 @@ function UserPage({ params }) {
       return;
     })
     .then((response) => {
-        console.log(response.data);
+       // console.log(response.data);
         setFavs(response.data)
     })
     .finally(

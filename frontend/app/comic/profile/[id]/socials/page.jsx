@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -8,6 +9,7 @@ import Spinner from "react-bootstrap/Spinner";
 
 function Socials({ params }) {
   const [data, setData] = useState({});
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [instaUrl, setInstaUrl] = useState("");
@@ -16,13 +18,35 @@ function Socials({ params }) {
   const [onlyFansUrl, setOnlyFansUrl] = useState("");
   const [wikifeetScore, setWikifeetScore] = useState(0);
   const [youtubeUrl, setYoutubeUrl] = useState("");
+  useEffect(() => {
+    const numId = parseInt(params.id);
+    const currId = parseInt(localStorage.getItem("currId"));
+    Promise.all([
+      axios.get(`http://localhost:8000/isAdmin/${numId}?usr_id=${currId}`),
+      axios.get(`http://localhost:8000/isMod/${numId}?usr_id=${currId}`),
+    ])
+      .then((res) => {
+        const [aR, mR] = res;
+        console.log("isAdmin:", aR.data);
+        console.log("isMod:", mR.data);
+
+        if (aR.data === false && mR.data === false) {
+          console.warn("You cannot access this page");
+          router.push("/");
+        }
+      })
+      .catch((err) => {
+        console.error("Error occurred:", err);
+        router.push("/");
+      });
+  }, []);
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/comics/${parseInt(params.id)}`)
       .then((res) => {
         setData(res.data);
-        console.log(res.data);
+        //console.log(res.data);
         setInstaUrl(res.data.instaUrl);
         setWikifeetUrl(res.data.wikifeetUrl);
         setTwitterUrl(res.data.twitterUrl);

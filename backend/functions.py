@@ -1,4 +1,5 @@
 import apiModels
+import countryCode
 import models
 from sqlalchemy.orm import Session
 
@@ -239,6 +240,17 @@ def get_country(db : Session,id :int):
         return None
     return usr.country.name
 
+def change_country(db : Session,id :int,code :str):
+    key = code.upper()
+    if key not in countryCode.codeToName:
+        return False
+    usr = db.query(models.Comic).filter(models.Comic.id == id).one_or_none()
+    if usr is None:
+        return None
+    usr.country.name = key
+    db.commit()
+    return True
+
 def get_comics_by_country(db : Session,code : str):
     q = db.query(models.Country).filter(models.Country.name == code).one_or_none()
     if q is None:
@@ -262,6 +274,21 @@ def get_special_by_id(db: Session,id :int):
     if q is None:
         return None
     return q
+
+def isAdmin(comic_id:int,user_id:int,db:Session):
+    cmc = db.query(models.Comic).filter(models.Comic.id == comic_id).one_or_none()
+    usr = db.query(models.User).filter(models.User.id == user_id).one_or_none()
+    if (cmc is None) or (usr is None):
+        return None
+    return cmc in usr.adminOf
+
+def isMod(comic_id:int,user_id:int,db:Session):
+    cmc = db.query(models.Comic).filter(models.Comic.id == comic_id).one_or_none()
+    usr = db.query(models.User).filter(models.User.id == user_id).one_or_none()
+    if (cmc is None) or (usr is None):
+        return None
+    return cmc in usr.modOf
+
 
 def get_adminsFor():
     pass

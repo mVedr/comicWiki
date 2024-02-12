@@ -15,7 +15,7 @@ function UpdateComic({ params }) {
       .get(`http://localhost:8000/comics/${numId}`)
       .then(function (res) {
         setData(res.data);
-        console.log(res.data);
+        //console.log(res.data);
       })
       .catch(function (err) {
         setError(err.response.data.detail);
